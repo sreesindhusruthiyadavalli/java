@@ -1,0 +1,111 @@
+package caveof;
+
+import com.memetix.mst.language.Language;
+import com.memetix.mst.translate.Translate;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class Langtest2 {
+	
+	final static String fileName = "C:\\WM\\Wiki\\Input\\Germany.txt";
+    final static String OUTPUT_FILE_NAME = "C:\\WM\\Wiki\\output\\German_trans.txt";
+    final static Charset ENCODING = StandardCharsets.UTF_8;
+    final static String fromlang = "English"; //This is the from value that should get
+    //from the drop down choosen in the UI. 
+    final static String tolang = "German";//This is the To language selection from
+    //the drop down
+
+	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
+		
+				 
+
+		        //Replace client_id and client_secret with your own.
+		        Translate.setClientId("Wikiganda01");
+		        Translate.setClientSecret("WikigandaProjectAnalysis");
+
+		        
+		        String filevalue = Langtest2.getInputFiles(fileName);
+		        String tolangconv = Langtest2.toLanguage(tolang);
+		        Langtest2.translateTextFile(filevalue, tolangconv);	        
+
+
+		    }
+	
+		//This method is to return the language choosen from the drop down.
+		//Use if required 
+			static String toLanguage(String tolangconv){
+				switch ( tolangconv ){
+				case "English":
+					System.out.println("Language chosen is "+ tolangconv);
+					break;
+				case "French":
+					System.out.println("Language chosen is "+ tolangconv);
+					break;
+				case "Spanish":
+					System.out.println("Language chosen is "+ tolangconv);
+					break;
+				case "German":
+					System.out.println("Language chosen is "+ tolangconv);
+					break;	
+				}
+				return tolangconv;
+			}
+
+
+		    private static void translateTextFile(String aFileName, String abrLang) throws IOException {
+		        Path path = Paths.get(aFileName);
+		        BufferedReader reader = Files.newBufferedReader(path, ENCODING);
+		        try {
+		            String line = null;
+		            StringBuilder text = new StringBuilder();
+		            while ((line = reader.readLine()) != null) {
+		                text.append(Translate.execute(line, Language.fromString(abrLang))).append("\n");
+		            }
+		            writeLargerTextFile(OUTPUT_FILE_NAME, text.toString());
+		        }catch(IOException e){
+		            e.printStackTrace();
+		        }catch(Exception e){
+		            e.printStackTrace();
+		        }finally {
+		            reader.close();
+		        }
+		    }
+
+		   private static void writeLargerTextFile(String aFileName, String tranline) throws IOException {
+		        Path path = Paths.get(aFileName);
+		        BufferedWriter writer = Files.newBufferedWriter(path, ENCODING);
+		        try {
+		            writer.write(tranline);
+		            writer.flush();
+		        }catch(IOException e){
+		            e.printStackTrace();
+		        }finally {
+		            writer.close();
+		        }
+		    }
+		   
+		   static String getInputFiles(String fileName){
+				File folder = new File(fileName);
+				File[] listfiles = folder.listFiles();
+				String fv = "";
+				
+				for(int i = 0;i < listfiles.length; i++)
+				{
+					if(listfiles[i].isFile()){
+						fv = fv + listfiles[i].getName();
+						
+					} 
+				}
+				return fv;
+			}
+		
+}
